@@ -1,18 +1,28 @@
 # token-free-skill
 
-A Codex skill for setting up [Magpie](https://usemagpie.ai/zh/) and the third-party [Our Free Model Magpie plugin](https://github.com/mu-zi-lee/magpie-our-free-model) across macOS, Windows, and Linux, then guiding the user through first use.
+A portable Agent Skills workflow for setting up [Magpie](https://usemagpie.ai/zh/) and the third-party [Our Free Model Magpie plugin](https://github.com/mu-zi-lee/magpie-our-free-model) across macOS, Windows, and Linux, then connecting the user's chosen agent and guiding first use.
+
+The executor can be any agent that reads Markdown instructions and has suitable local installation tools. Model clients use a Magpie adapter where available, or their documented OpenAI, Anthropic or Gemini custom endpoint settings. See [agent integration](references/agent-integration.md). Clients that do not allow a compatible custom provider cannot be made compatible by a skill alone.
 
 The skill checks the host platform and existing installation, uses official download sources, adds the plugin from a stable local directory, verifies that it is enabled, and hands account sign-in back to the user. It explains the difference between free model pools, existing subscriptions, API billing, and local models.
 
 ## Install the skill
 
-Copy or clone this repository into your Codex skills directory as `token-free-skill`, then invoke it with `$token-free-skill` when you want help installing or troubleshooting this setup. For example, on macOS or Linux:
+Clone the repository, then place it in your agent's documented skill directory or tell the agent to read the downloaded `SKILL.md` directly:
+
+```sh
+git clone https://github.com/Laplace-bit/token-free-skill.git
+```
+
+Use the invocation supported by that agent (named skill, slash command, or a direct request). For example: “Read `/path/to/token-free-skill/SKILL.md`, install Magpie and Our Free Model on this machine, and configure my chosen agent.” The workflow does not depend on Codex tools or OpenAI services. The optional `agents/openai.yaml` only provides UI metadata for clients that recognize it.
+
+For Codex specifically, an installation example on macOS/Linux is:
 
 ```sh
 git clone https://github.com/Laplace-bit/token-free-skill.git ~/.codex/skills/token-free-skill
 ```
 
-On Windows, clone or copy the repository to `%USERPROFILE%\.codex\skills\token-free-skill`.
+For Codex on Windows, clone or copy to `%USERPROFILE%\.codex\skills\token-free-skill`. For Claude Code, OpenCode, Gemini CLI and other executors, use their own current skill-discovery instructions; the repository entrypoint stays `SKILL.md`.
 
 ## What to expect
 
