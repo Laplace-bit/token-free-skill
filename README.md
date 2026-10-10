@@ -23,6 +23,18 @@ On Windows, clone or copy the repository to `%USERPROFILE%\.codex\skills\token-f
 
 See [SKILL.md](SKILL.md) for the entrypoint and [the platform and usage reference](references/platform-and-usage.md) for OS-specific installation and first-use guidance.
 
+The [execution and recovery guide](references/execution-and-recovery.md) adds concrete shell commands, checksum verification, existing-install reuse, protected configuration backups, bounded retries, and separate checks for installation, runtime, model discovery, agent configuration, and inference. The agent reports which stages it actually verified and which still need a user sign-in.
+
+An optional, read-only environment helper uses Python 3's standard library:
+
+```sh
+python3 scripts/preflight.py
+```
+
+It detects native architecture (including Rosetta/Windows emulation), WSL/SSH context, available tools, and likely Magpie executables. It does not download software, change files, run Magpie, or read credentials. When Python is unavailable, the skill provides shell checks instead.
+
+Maintainers can run `python3 -m unittest discover -s tests` to verify architecture/host selection. The helper has been run on the author's macOS host; Windows/other-platform installation templates are documentation-derived, not real-hardware installation tests.
+
 ## Upstream references
 
 - [Magpie Chinese homepage](https://usemagpie.ai/zh/)

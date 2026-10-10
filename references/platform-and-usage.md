@@ -2,6 +2,8 @@
 
 Checked against upstream documentation on 2026-10-10. Re-read the linked current release notes before a future install; asset names, requirements, and support status can change.
 
+For executable discovery, quoted shell commands, safe reruns and acceptance criteria, read [execution-and-recovery.md](execution-and-recovery.md). Runtime versions below describe the reviewed plugin version; use the installed package's current requirements rather than pinning them in a new setup.
+
 ## Magpie installation
 
 Magpie is the local gateway and model/agent configuration manager. It is a separate project from the Our Free Model plugin.
@@ -12,6 +14,7 @@ First inspect the host OS and CPU architecture and check whether Magpie already 
 
 - Choose the official Apple Silicon (`arm64`) or Intel (`amd64`) release from [usemagpie.ai](https://usemagpie.ai/zh/) or [Magpie releases](https://github.com/yetone/magpie-releases/releases).
 - The official shell installer is suitable for macOS and checks the downloaded release's SHA-256 against the feed from usemagpie.ai. Fetch it from `https://usemagpie.ai/install.sh`, inspect the saved script, then run it only if the user requested installation. It installs `magpie.app` into `/Applications` (or `~/Applications` if that is not writable) and the CLI into `~/.local/bin`.
+- Installation may leave the command outside PATH; use the resolved full path until the user chooses to adjust PATH. Inspect existing app destinations before running an installer that may replace them.
 - The site has shown conflicting minimum macOS versions (12+ in one place and 11+ elsewhere). Check the current release/site requirement; when unresolved, do not promise support below macOS 12.
 
 ### Windows
@@ -44,6 +47,8 @@ Use a persistent user directory (for example, `~/.local/share/magpie-plugins/mag
 
 Normal setup does not need `npm install`, compilation, a separate Our Free Model launch, or a global Node.js install. On first plugin enable, it can download Node.js 24.21.0 when a compatible Node.js (22.19+ or 24+) is absent. Its runtime stays in the plugin data directory and is SHA-256 checked; the project says this does not need root or system PATH changes. macOS/Linux need `tar` for these downloads. The plugin can also fetch `cloudflared` when a remote management tunnel is requested; prefer the local console on a desktop machine.
 
+These are runtime details recorded for plugin 0.8.0. Check the installed `package.json` and README for changed Node requirements and managed download versions before troubleshooting.
+
 The project lists automatic Node downloads for Linux/macOS/Windows x64 and ARM64 (Alpine currently x64 only), but its README and validation notes say that some OS/runtime paths have not been exercised on the corresponding hardware. Its Cloudflare binary list includes Windows x64, not Windows ARM64. Do not promise that an unverified combination will work. If activation fails, report the precise OS/architecture and error; do not silently install global runtimes or switch to a different provider.
 
 ## First use
@@ -53,6 +58,8 @@ The project lists automatic Node downloads for Linux/macOS/Windows x64 and ARM64
 3. The plugin management link is one-use and expires after 10 minutes. A Cloudflare management tunnel lasts at most 30 minutes; regenerate it in Magpie when needed. The Cloudflare option does not require a Cloudflare account, but it is still a secret management link. It exposes the plugin management console, not the model API. Keep it private and keep Magpie running while using the plugin.
 4. Choose an actual provider path in the console. Anonymous Zen/Kilo models may be available without account setup. EAC requires its GitHub login and Star check. Account channels need the corresponding provider login. The UI's “connected” state means the plugin is active; it does not prove that a given model or quota is available.
 5. Return to Magpie, refresh the provider's models, then use **Agents** to select a model under `our-free-model`. Start a new agent session. Magpie's gateway runs locally at `127.0.0.1:3425`; keep the Magpie app or supported host process running. If changing a Codex model list, restart Codex and any open Codex session.
+
+Keep desktop Magpie, `magpie web`, or `magpie serve` running throughout management and use. A short-lived `magpie plugin login our-free-model` command closes the plugin service when it exits. Do not confuse completing registration with completing runtime/model verification.
 
 Do not collect credentials in chat. Let the user complete browser authorization and vendor sign-in directly. Tell the user that Magpie can also use their existing paid subscriptions, API providers, or local Ollama/LM Studio; API billing follows the provider's terms. A free model pool is not guaranteed to be unlimited, always online, eligible for every account, or permanently free.
 
